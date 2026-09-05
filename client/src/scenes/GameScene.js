@@ -174,9 +174,7 @@ export function createGameScene(app) {
     dicethrowbox.y = 95
     diceContainer.addChild(dicethrowbox)
 
-    const dicethrowbutton = new PIXI.Graphics()
-    dicethrowbutton.rect(0,0,25,60)
-    dicethrowbutton.fill(0x225522)
+    const dicethrowbutton = PIXI.Sprite.from('buttonOff')
     dicethrowbutton.x = 151
     dicethrowbutton.y = 95
     diceContainer.addChild(dicethrowbutton)
@@ -188,18 +186,20 @@ export function createGameScene(app) {
         socket.emit('roll')
     })
 
-    socket.on('turn', (data) => {
+    const SetButton = (data) => {
         const myTurn = data.playerId === myPlayerId
-        console.log(myTurn)
         dicethrowbutton.eventMode = myTurn ? 'static' : 'none'
-        dicethrowbutton.clear()
-        dicethrowbutton.rect(0, 0, 25, 60)
-        dicethrowbutton.fill(myTurn ? 0x55ff55 : 0x225522)
-    })
+        dicethrowbutton.texture = PIXI.Texture.from(
+            myTurn ? 'buttonOn' : 'buttonOff'
+        )
+    }
+
+    socket.on('turn', SetButton)
 
     container.cleanup = () => {
         socket.off('board', SetBoard)
         socket.off('players', SetPlayers)
+        socket.off('turn', SetButton)
     }
 
     return container;

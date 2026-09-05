@@ -19,7 +19,8 @@ async function main() {
 
     await PIXI.Assets.load([
         '/assets/numbers.json', 
-        '/assets/pawn.png'
+        '/assets/pawn.png',
+        '/assets/button.json'
     ])
     
 
