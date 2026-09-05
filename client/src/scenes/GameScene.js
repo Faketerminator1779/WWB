@@ -167,9 +167,7 @@ export function createGameScene(app) {
     diceBackground.y = 93
     diceContainer.addChild(diceBackground)
 
-    const dicethrowbox = new PIXI.Graphics()
-    dicethrowbox.rect(0,0,60,60)
-    dicethrowbox.fill(0xffffff)
+    const dicethrowbox = PIXI.Sprite.from('dice0')
     dicethrowbox.x = 176
     dicethrowbox.y = 95
     diceContainer.addChild(dicethrowbox)
@@ -195,6 +193,33 @@ export function createGameScene(app) {
     }
 
     socket.on('turn', SetButton)
+
+    const SetDice = (rolledNummer) => {
+        switch (rolledNummer){
+            case 1:
+                dicethrowbox.texture = PIXI.Texture.from('dice1')
+                break
+            case 2:
+                dicethrowbox.texture = PIXI.Texture.from('dice2')
+                break
+            case 3:
+                dicethrowbox.texture = PIXI.Texture.from('dice3')
+                break
+            case 4:
+                dicethrowbox.texture = PIXI.Texture.from('dice4')
+                break
+            case 5:
+                dicethrowbox.texture = PIXI.Texture.from('dice5')
+                break
+            case 6:
+                dicethrowbox.texture = PIXI.Texture.from('dice6')
+                break
+            default:
+                dicethrowbox.texture = PIXI.Texture.from('dice0')
+                break
+        }
+    }
+    socket.on('dieRoll', SetDice)
 
     container.cleanup = () => {
         socket.off('board', SetBoard)

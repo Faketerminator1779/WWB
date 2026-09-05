@@ -20,7 +20,8 @@ async function main() {
     await PIXI.Assets.load([
         '/assets/numbers.json', 
         '/assets/pawn.png',
-        '/assets/button.json'
+        '/assets/button.json',
+        '/assets/dice.json'
     ])
     
 
@@ -63,5 +64,9 @@ async function main() {
 
     setScene(1);
 }
+
+window.addEventListener('contextmenu', (event) => {
+    event.preventDefault();
+});
 
 main()

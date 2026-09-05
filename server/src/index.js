@@ -92,7 +92,7 @@ io.on('connection', (socket) => {
         }
 
         let rolledValue = Math.floor(Math.random() * 6) + 1
-
+        io.emit('dieRoll', rolledValue)
         if(player.reroll) {
             player.reroll = false
             if (rolledValue == 5) {
