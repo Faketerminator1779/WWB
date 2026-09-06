@@ -126,10 +126,33 @@ export function createGameScene(app) {
                 playerTileContainer.addChild(tile)
 
             } else if (player.color == currentPlayerColor) {
-                tile.stroke({
-                    width: 1,
-                    color: 0xffffff
-                })
+                const tileturnbackground = new PIXI.Graphics()
+                tileturnbackground.rect(0,0,27,27)
+                tileturnbackground.fill(0xffffff)
+                tileturnbackground.x = 151 + ((index) % 3) * 29
+                tileturnbackground.y = 4 + (29 * Math.floor(index / 3))
+                playerTileContainer.addChild(tileturnbackground)
+
+                const tile = new PIXI.Graphics();
+                tile.rect(0, 0, 25, 25)
+                tile.fill(player.color)
+                tile.x = 152 + ((index) % 3) * 29
+                tile.y = 5 + (29 * Math.floor(index / 3)) 
+                playerTileContainer.addChild(tile)
+            } else if (player.color == myPlayerColor) {
+                const tileturnbackground = new PIXI.Graphics()
+                tileturnbackground.rect(0,0,27,27)
+                tileturnbackground.fill(0x999999)
+                tileturnbackground.x = 151 + ((index) % 3) * 29
+                tileturnbackground.y = 4 + (29 * Math.floor(index / 3))
+                playerTileContainer.addChild(tileturnbackground)
+
+                const tile = new PIXI.Graphics();
+                tile.rect(0, 0, 25, 25)
+                tile.fill(player.color)
+                tile.x = 152 + ((index) % 3) * 29
+                tile.y = 5 + (29 * Math.floor(index / 3)) 
+                playerTileContainer.addChild(tile)
             } else {
                 const tile = new PIXI.Graphics();
                 tile.rect(0, 0, 27, 27)
@@ -138,6 +161,24 @@ export function createGameScene(app) {
                 tile.y = 4 + (29 * Math.floor(index / 3)) 
                 playerTileContainer.addChild(tile)
             }
+            console.log(player.maxTile)
+
+            const numberContainer = new PIXI.Container();
+
+            const digits = player.maxTile.toString();
+
+            for (const digit of digits) {
+                const sprite = PIXI.Sprite.from(digit)
+                sprite.width = 4
+                sprite.height = 5
+                sprite.x = 176 - (digits.length - numberContainer.children.length) * 5 + ((index) % 3) * 29
+                sprite.y = 23 + (29 * Math.floor(index / 3)) 
+
+                numberContainer.addChild(sprite)
+            }
+
+            playerTileContainer.addChild(numberContainer)
+
             const position = getPosition(currentBoard, player.position)
                 
             if (position) {
@@ -186,6 +227,7 @@ export function createGameScene(app) {
 
     const SetButton = (data) => {
         const myTurn = data.playerId === myPlayerId
+        currentPlayerColor = data.color
         dicethrowbutton.eventMode = myTurn ? 'static' : 'none'
         dicethrowbutton.texture = PIXI.Texture.from(
             myTurn ? 'buttonOn' : 'buttonOff'

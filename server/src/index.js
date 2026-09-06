@@ -19,9 +19,13 @@ const COLORS = [
     0x0000FF,
     0xFFFF00,
     0xFF00FF,
+    0x00FFFF,
     0x0099FF,
     0x9900FF,
     0x99FF00,
+    0x00FF99,
+    0xFF9900,
+    0xFF0099
 ]
 
 io.on('connection', (socket) => {
@@ -67,7 +71,8 @@ io.on('connection', (socket) => {
                 name: name,
                 position: 0,
                 color: color,
-                reroll: false
+                reroll: false,
+                maxTile: 0
             })
             activePlayers.push(players[id])
             socket.emit('nameAccepted')
@@ -116,11 +121,13 @@ io.on('connection', (socket) => {
                     nextTurn()
                 } else {
                     player.position++
+                    if (player.position > player.maxTile) {
+                        player.maxTile = player.position
+                    }
                     player.reroll = true
                     io.emit('players', activePlayers)
                 }
             } else {
-                player.position = 0
                 io.emit('players', activePlayers)
                 nextTurn()
             }
@@ -175,10 +182,15 @@ function sendTurn() {
 
     const player = activePlayers[playerCurrentTurn]
 
+    if (!player.socket) {
+        console.log("WHAT")
+    }
+
     io.emit('turn', {
         playerId: player.socket,
         color: player.color
     })
+    io.emit('players', activePlayers)
 }
 
 function nextTurn() {

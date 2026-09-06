@@ -64,9 +64,9 @@ async function main() {
 
     setScene(1);
 }
-
+/*
 window.addEventListener('contextmenu', (event) => {
     event.preventDefault();
 });
-
+*/
 main()
